@@ -1,4 +1,4 @@
-import { Paper, Title, Text, Center, Container } from '@mantine/core';
+import { Paper, Title, Text, Container } from '@mantine/core';
 import Layout from '../layouts/Layout';
 
 function Contacts() {
@@ -6,7 +6,7 @@ function Contacts() {
   <Layout>
     <Title order={1}>Contacts</Title>
     <Container size="xs" px="xs">
-    <Paper shadow="md" p="xl" withBorder>
+    <Paper shadow="lg" p="xl" withBorder>
       <Text size="xl">You can easily contact with us using:</Text>
       <Text size="xl">
         Email: coworking@mail.ru
