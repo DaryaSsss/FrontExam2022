@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout';
 function Contacts() {
   return (
   <Layout>
-    <Title order={1}>Contacts</Title>
+    <Title order={1} mb="xl">Contacts</Title>
     <Container size="xs" px="xs">
     <Paper shadow="lg" p="xl" withBorder>
       <Text size="xl">You can easily contact with us using:</Text>

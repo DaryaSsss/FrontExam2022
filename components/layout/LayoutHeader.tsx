@@ -26,7 +26,7 @@ return (
                 <Link href="/signin" passHref>
                     <Button variant="subtle" color="dark" component="a" uppercase>Sign in</Button>
                 </Link>
-                <Link href="/signin" passHref>
+                <Link href="/signup" passHref>
                     <Button variant="subtle" color="dark" component="a" uppercase>Sign up</Button>
                 </Link>
             </Group>
