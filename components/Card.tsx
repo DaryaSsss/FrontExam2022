@@ -4,7 +4,7 @@ import { IPlace } from '../pages';
 
 function Card({ place }: { place: IPlace }) {
     return (
-    <Paper shadow="xs" p="md" withBorder>
+    <Paper shadow="xs" p="md" withBorder style={{ height: '100%' }}>
         <Text size="xl" mb="md">{place.name}</Text>
         <Text size="md" mb="md" style={{ whiteSpace: 'break-spaces' }}>{place.desc}</Text>
         <Link href="/signup" passHref>
