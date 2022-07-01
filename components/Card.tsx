@@ -7,8 +7,8 @@ function Card({ place }: { place: IPlace }) {
     <Paper shadow="xs" p="md" withBorder style={{ height: '100%' }}>
         <Text size="xl" mb="md">{place.name}</Text>
         <Text size="md" mb="md" style={{ whiteSpace: 'break-spaces' }}>{place.desc}</Text>
-        <Link href="/signup" passHref>
-            <Button variant="outline" color="dark" component="a" uppercase>Book place</Button>
+        <Link href={`places/${place.id}`} passHref>
+            <Button variant="outline" color="dark" component="a" uppercase>Know more</Button>
         </Link>
     </Paper>
     );

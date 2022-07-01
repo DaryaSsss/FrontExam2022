@@ -13,7 +13,7 @@ return (
         <Group position="apart">
             <Group>
                 <Link href="/" passHref>
-                    <Button variant="subtle" color="dark" component="a" uppercase>Services</Button>
+                    <Button variant="subtle" color="dark" component="a" uppercase>Places</Button>
                 </Link>
                 <Link href="/contacts" passHref>
                     <Button variant="subtle" color="dark" component="a" uppercase>Contacts</Button>
