@@ -1,10 +1,22 @@
 import { Button, Center, Group, Modal, Paper, Stack, Text, TextInput, Title } from '@mantine/core';
 import { DateRangePicker } from '@mantine/dates';
+import { observer } from 'mobx-react-lite';
 import { ParsedUrlQuery } from 'querystring';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CommentCard from '../../components/CommentCard';
 import Layout from '../../layouts/Layout';
+import commentsStore from '../../store/commentsStore';
 
+function Comments() {
+  return (
+    <>
+      {commentsStore.commentsList.map(((comment, i) =>
+       <CommentCard key={i} comment={comment} />))}
+    </>
+  );
+}
+
+const CommentsObserver = observer(Comments);
 export interface IPlace {
   url: string;
   id: string;
@@ -19,6 +31,11 @@ interface Params extends ParsedUrlQuery {
 }
 
 function Place({ place }: { place: IPlace }) {
+  useEffect(() => {
+    commentsStore.getCommentsFromApi(place.id);
+  }, []);
+
+  const [inputComment, setInputComment] = useState('');
   const [opened, setOpened] = useState(false);
     return (
     <Layout>
@@ -65,9 +82,27 @@ function Place({ place }: { place: IPlace }) {
         mb="md"
         placeholder="Type here"
         label="Leave here your comment or review"
+        value={inputComment}
+        onChange={(evt) => {
+          commentsStore.comment.text = evt.currentTarget.value;
+          setInputComment(evt.currentTarget.value);
+        }}
       />
-      <Button mb="md" variant="light" color="dark" type="submit">Create comment</Button>
-      <CommentCard />
+      <Button
+        onClick={() => {
+          const { text } = commentsStore.comment;
+          if (text?.length) {
+            commentsStore.addCommentsToApi(place.id, text);
+            setInputComment('');
+          }
+        }}
+        mb="md"
+        variant="light"
+        color="dark"
+        type="submit"
+      >Create comment
+      </Button>
+      <CommentsObserver />
     </>
     : <Center>Something went wrong, please reload the page</Center> }
     </Layout>
