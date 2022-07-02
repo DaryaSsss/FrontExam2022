@@ -11,7 +11,7 @@ export interface ICommentModel {
   user_id: string;
   text: string;
   date: string;
-  place: string;
+  place_id: string;
 }
 
 class CommentsStore {
@@ -25,7 +25,7 @@ class CommentsStore {
       username: 'Guest',
       date: '',
       user_id: '',
-      place: '',
+      place_id: '',
     };
   }
 
@@ -68,6 +68,43 @@ class CommentsStore {
       this.comment = this.resetCommentData();
     } catch (e) {
         console.log(`error ${e}`);
+    }
+  };
+
+  deleteComment = async (comment: number | string) => {
+    try {
+      const url = `http://127.0.0.1:8000/api/comments/${comment}/`;
+      const response = await axios({
+        method: 'delete',
+        url,
+        withCredentials: false,
+      });
+      this.commentsList = this.commentsList.filter(c => c.id !== +comment);
+      return response;
+    } catch (e) {
+      console.log(`error ${e}`);
+      return e;
+    }
+  };
+
+  changeComment = async (comment: number | string, text: string, place_id: number | string) => {
+    try {
+      const url = `http://127.0.0.1:8000/api/comments/${comment}/`;
+      const response = await axios({
+        method: 'put',
+        url,
+        withCredentials: false,
+        data: {
+          place: +place_id,
+          text },
+      });
+      if (response.status === 200) {
+        this.commentsList = response.data;
+      }
+      return response;
+    } catch (e) {
+      console.log(`error ${e}`);
+      return e;
     }
   };
 }
