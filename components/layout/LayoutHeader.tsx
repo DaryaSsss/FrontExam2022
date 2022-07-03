@@ -1,4 +1,4 @@
-import { Header, Group, Button } from '@mantine/core';
+import { Header, Group, Button, Text } from '@mantine/core';
 import Link from 'next/link';
 
 function LayoutHeader() {
@@ -11,6 +11,17 @@ return (
           })}
         >
         <Group position="apart">
+        <Group>
+               <Text
+                 px="18px"
+                 size="xl"
+                 variant="gradient"
+                 gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}
+                 weight={700}
+                 transform="uppercase"
+               >Coworking Area
+               </Text>
+        </Group>
             <Group>
                 <Link href="/" passHref>
                     <Button variant="subtle" color="dark" component="a" uppercase>Places</Button>
@@ -20,14 +31,6 @@ return (
                 </Link>
                 <Link href="/about" passHref>
                     <Button variant="subtle" color="dark" component="a" uppercase>About</Button>
-                </Link>
-            </Group>
-            <Group>
-                <Link href="/signin" passHref>
-                    <Button variant="subtle" color="dark" component="a" uppercase>Sign in</Button>
-                </Link>
-                <Link href="/signup" passHref>
-                    <Button variant="subtle" color="dark" component="a" uppercase>Sign up</Button>
                 </Link>
             </Group>
         </Group>
