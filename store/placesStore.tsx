@@ -108,7 +108,7 @@ class PlacesStore {
     out: string;
   }) => {
     try {
-      const url = `http://127.0.0.1:8000/api/bookings/${place}/create_booking/`;
+      const url = `${ApiUrl}/api/bookings/${place}/create_booking/`;
       const bookingToApi = await axios({
         method: 'post',
         url,
