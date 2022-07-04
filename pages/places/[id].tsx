@@ -80,7 +80,9 @@ function Place() {
             <Text size="md" mb="md" style={{ whiteSpace: 'break-spaces' }}>{place.desc}</Text>
             <Button variant="light" color="dark" onClick={() => setOpened(true)}>Book this place</Button>
         </Paper>
-      : <Text>You already booked this place</Text> }
+      : <Stack><Text size="xl">Great, your booking is done!</Text>
+          <Text size="lg">We will send you an email with information about it.</Text>
+        </Stack>}
     </Group>
     <Modal
       centered
