@@ -1,11 +1,19 @@
 import { Button, Center, Group, Modal, Paper, Stack, Text, TextInput, Title } from '@mantine/core';
 import { DateRangePicker } from '@mantine/dates';
 import { observer } from 'mobx-react-lite';
-import { ParsedUrlQuery } from 'querystring';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import CommentCard from '../../components/CommentCard';
 import Layout from '../../layouts/Layout';
 import commentsStore from '../../store/commentsStore';
+import placesStore from '../../store/placesStore';
+
+const dateOptions = {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+  timezone: 'UTC',
+};
 
 function Comments() {
   return (
@@ -26,28 +34,53 @@ export interface IPlace {
   free: boolean;
 }
 
-interface Params extends ParsedUrlQuery {
-  id: string,
-}
-
-function Place({ place }: { place: IPlace }) {
+function Place() {
+  const [place, setPlace] = useState<IPlace | null>(null);
+  const [value, setValue] = useState<[Date | null, Date | null]>([
+    null,
+    null,
+  ]);
   useEffect(() => {
-    commentsStore.getCommentsFromApi(place.id);
-  }, []);
+    if (place) {
+      commentsStore.getCommentsFromApi(place.id);
+    }
+  }, [place]);
 
   const [inputComment, setInputComment] = useState('');
   const [opened, setOpened] = useState(false);
+
+  const [free, setFree] = useState(true);
+  useEffect(() => {
+    if (place) {
+      setFree(place.free);
+    }
+  }, [place]);
+
+  const router = useRouter();
+  const { id } = router.query;
+
+  useEffect(() => {
+    const fetchPlace = async () => {
+      if (id) {
+        const response = await placesStore.getPlaceFromApi({ place: id.toString() });
+        setPlace(response);
+      }
+    };
+    fetchPlace();
+  }, [id]);
     return (
     <Layout>
     { place?.id !== undefined ?
     <>
     <Title order={1} mb="xl">Currently place is {place.name}</Title>
     <Group spacing="xl" mb="xl">
+      { free ?
         <Paper shadow="xs" p="md" withBorder>
             <Text size="xl" mb="md">{place.name}</Text>
             <Text size="md" mb="md" style={{ whiteSpace: 'break-spaces' }}>{place.desc}</Text>
             <Button variant="light" color="dark" onClick={() => setOpened(true)}>Book this place</Button>
         </Paper>
+      : <Text>You already booked this place</Text> }
     </Group>
     <Modal
       centered
@@ -60,19 +93,47 @@ function Place({ place }: { place: IPlace }) {
           placeholder="dasha111"
           label="Username"
           required
+          onChange={(evt) => {
+            placesStore.booking.username = evt.currentTarget.value;
+          }}
         />
         <TextInput
           placeholder="dasha@mail.ru"
           label="Email"
           required
+          onChange={(evt) => {
+            placesStore.booking.email = evt.currentTarget.value;
+          }}
         />
         <DateRangePicker
           pb="md"
           label="Choose dates"
           placeholder=".... - ...."
-          required
+          value={value}
+          onChange={(v) => {
+            setValue(v);
+            if (v[0] && v[1]) {
+              console.log(v[0], v[1]);
+              placesStore.booking.timeInterval = [v[0].toLocaleString('ru', dateOptions), v[1].toLocaleString('ru', dateOptions)];
+            }
+          }}
         />
-        <Button type="submit">Book</Button>
+        <Button
+          onClick={() => {
+          setOpened(false);
+          setFree(false);
+          const { username, email } = placesStore.booking;
+          placesStore.addPlaceBookingToApi({
+            place: place.id,
+            username,
+            email,
+            out: placesStore.booking.timeInterval[0],
+            _in: placesStore.booking.timeInterval[1],
+          });
+        }}
+          type="submit"
+        >Book
+        </Button>
         <Text size="xs">By clicking button you agree to our rules and automatically pay for service</Text>
         </Stack>
     </Modal>
@@ -108,44 +169,5 @@ function Place({ place }: { place: IPlace }) {
     </Layout>
     );
 }
-
-export async function getServerSideProps({ params }: { params: Params }) {
-  try {
-    const res = await fetch(`http://127.0.0.1:8000/api/places/${params.id}`);
-    const place = await res.json();
-    return {
-      props: {
-        place,
-      },
-    };
-  } catch (e) {
-      return {
-        props: {
-          errorMsg: 'Something went wrong, please reload the page',
-        },
-      };
-  }
-}
-
-// async function postData(url = '', data = {}) {
-//   const response = await fetch(url, {
-//     method: 'POST',
-//     mode: 'cors',
-//     cache: 'no-cache',
-//     credentials: 'same-origin',
-//     headers: {
-//       'Content-Type': 'application/json',
-//      },
-//     redirect: 'follow',
-//     referrerPolicy: 'no-referrer',
-//     body: JSON.stringify(data),
-//   });
-//   return response.json();
-// }
-
-// postData('https://example.com/answer', { answer: 42 })
-//   .then((data) => {
-//     console.log(data);
-//   });
 
 export default Place;

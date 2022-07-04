@@ -12,7 +12,9 @@ return (
         >
         <Group position="apart">
         <Group>
+        <Link href="/" passHref>
                <Text
+                 style={{ cursor: 'pointer', fontSize: '25px' }}
                  px="18px"
                  size="xl"
                  variant="gradient"
@@ -21,6 +23,7 @@ return (
                  transform="uppercase"
                >Coworking Area
                </Text>
+        </Link>
         </Group>
             <Group>
                 <Link href="/" passHref>
