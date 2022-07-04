@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { configure, makeAutoObservable } from 'mobx';
 
+const ApiUrl = 'https://daryasemina.pythonanywhere.com';
+
 configure({
   enforceActions: 'never',
 });
@@ -60,7 +62,7 @@ class PlacesStore {
 
   getPlacesFromApi = async () => {
     try {
-      const url = 'http://127.0.0.1:8000/api/places/';
+      const url = `${ApiUrl}/api/places/`;
       const places = await axios({
         method: 'get',
         url,
@@ -77,7 +79,7 @@ class PlacesStore {
 
   getPlaceFromApi = async ({ place } : { place: string | number }) => {
     try {
-      const url = `http://127.0.0.1:8000/api/places/${place}/`;
+      const url = `${ApiUrl}/api/places/${place}/`;
       const placeFromApi = await axios({
         method: 'get',
         url,

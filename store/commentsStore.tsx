@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { configure, makeAutoObservable } from 'mobx';
 
+const ApiUrl = 'https://daryasemina.pythonanywhere.com';
+
 configure({
   enforceActions: 'never',
 });
@@ -40,7 +42,7 @@ class CommentsStore {
 
   getCommentsFromApi = async (place: number | string) => {
     try {
-      const url = `http://127.0.0.1:8000/api/places/${place}/comments/`;
+      const url = `${ApiUrl}/api/places/${place}/comments/`;
       const commentsFromApi = await axios({
         method: 'get',
         url,
@@ -54,7 +56,7 @@ class CommentsStore {
 
   addCommentsToApi = async (place: number | string, text: string) => {
     try {
-      const url = `http://127.0.0.1:8000/api/places/${place}/create_comment/`;
+      const url = `${ApiUrl}/api/places/${place}/create_comment/`;
       const commentsFromApi = await axios({
         method: 'post',
         url,
@@ -73,7 +75,7 @@ class CommentsStore {
 
   deleteComment = async (comment: number | string) => {
     try {
-      const url = `http://127.0.0.1:8000/api/comments/${comment}/`;
+      const url = `${ApiUrl}/api/comments/${comment}/`;
       const response = await axios({
         method: 'delete',
         url,
@@ -89,7 +91,7 @@ class CommentsStore {
 
   changeComment = async (comment: number | string, text: string, place_id: number | string) => {
     try {
-      const url = `http://127.0.0.1:8000/api/comments/${comment}/`;
+      const url = `${ApiUrl}/api/comments/${comment}/`;
       const response = await axios({
         method: 'put',
         url,
