@@ -11,4 +11,5 @@ module.exports = withBundleAnalyzer({
   typescript: {
     ignoreBuildErrors: true,
   },
+  optimizeFonts: false,
 });
